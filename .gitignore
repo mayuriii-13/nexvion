@@ -1,0 +1,11 @@
+
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
+dist/
