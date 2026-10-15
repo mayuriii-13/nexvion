@@ -1,0 +1,36 @@
+name: Deploy Nexvion to S3
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::800849967875:role/NexvionS3DeployPolicy
+          aws-region: ap-south-1
+
+      - name: Upload website to S3
+        run: |
+          aws s3 cp index.html s3://nexvion-mayuri-demo-2026/index.html
+          aws s3 cp products.html s3://nexvion-mayuri-demo-2026/products.html
+          aws s3 cp payment.html s3://nexvion-mayuri-demo-2026/payment.html
+          aws s3 cp style.css s3://nexvion-mayuri-demo-2026/style.css
+          aws s3 cp products.css s3://nexvion-mayuri-demo-2026/products.css
+          aws s3 cp payment.css s3://nexvion-mayuri-demo-2026/payment.css
+          aws s3 cp script.js s3://nexvion-mayuri-demo-2026/script.js
+          aws s3 cp payment.js s3://nexvion-mayuri-demo-2026/payment.js
+          aws s3 cp logo.png s3://nexvion-mayuri-demo-2026/logo.png
