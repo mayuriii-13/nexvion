@@ -1,362 +1,268 @@
-\# 🛍️ Nexvion — E-Commerce Website
+# 🛍️ Nexvion — E-Commerce Website
 
+Nexvion is a static e-commerce website demo built with **HTML, CSS, and JavaScript**, containerized with **Docker**, hosted using **Amazon S3**, and automated with **GitHub Actions CI/CD**.
 
+The project demonstrates practical **AWS, Docker, Git, GitHub, IAM, OIDC, and CI/CD** concepts.
 
-Nexvion is a static e-commerce website demo built with HTML, CSS, and JavaScript, containerized with Docker, hosted using Amazon S3, and automated with GitHub Actions CI/CD.
+---
 
-
-
-The project demonstrates practical \*\*AWS, Docker, Git, GitHub, IAM, OIDC, and CI/CD\*\* concepts.
-
-
-
-\---
-
-
-
-\## 🚀 Live Architecture
-
-
+## 🚀 Architecture
 
 ```text
-
 Developer
-
-&#x20;  │
-
-&#x20;  │ git push
-
-&#x20;  ▼
-
+   │
+   │ git push
+   ▼
 GitHub Repository
-
-&#x20;  │
-
-&#x20;  ▼
-
+   │
+   ▼
 GitHub Actions
-
-&#x20;  │
-
-&#x20;  │ OIDC authentication
-
-&#x20;  ▼
-
+   │
+   │ OIDC authentication
+   ▼
 AWS IAM Role
-
-&#x20;  │
-
-&#x20;  │ S3 permissions
-
-&#x20;  ▼
-
+   │
+   │ S3 permissions
+   ▼
 Amazon S3
+   │
+   ▼
+Nexvion Website
+```
 
-&#x20;  │
+> CloudFront was used during an earlier deployment phase but is currently disabled to avoid unnecessary ongoing costs.
 
-&#x20;  ▼
+---
 
-Nexvion Website Files
+## ✨ Features
 
+### 🛒 Shopping
 
+- Product catalogue with 12 products
+- Product search
+- Category filtering
+- Price filtering
+- Stock filtering
+- Product sorting
+- Shopping cart
+- Cart quantity controls
 
-CloudFront was used during an earlier deployment phase but is currently disabled to avoid unnecessary ongoing costs.
+### 👤 Account
 
+- Login
+- Registration
+- Logout
+- LocalStorage-based account persistence
+- LocalStorage-based cart persistence
 
+### 💳 Checkout Demo
 
-✨ Features
+- Separate payment page
+- Card number validation
+- CVV validation
+- Expiry date validation
+- UPI validation
+- Cash on Delivery option
+- Order confirmation
 
-🛒 Shopping
+> **Important:** Authentication and payment functionality are frontend demo features using browser LocalStorage. No real payment gateway or production authentication service is implemented.
 
-\- Product catalogue with 12 products
+---
 
-\- Product search
+## 🛠️ Technologies Used
 
-\- Category filtering
+### Frontend
 
-\- Price filtering
+- HTML5
+- CSS3
+- JavaScript
+- Browser LocalStorage
 
-\- Stock filtering
+### DevOps / Cloud
 
-\- Product sorting
+- Git
+- GitHub
+- GitHub Actions
+- Docker
+- Docker Hub
+- Amazon S3
+- AWS IAM
+- GitHub OIDC
 
-\- Shopping cart
+---
 
-\- Cart quantity controls
+## 🐳 Docker
 
-👤 Account
+The application is containerized using **Nginx**.
 
-\- Login
+### Build Docker Image
 
-\- Registration
-
-\- Logout
-
-\- LocalStorage-based account persistence
-
-\- LocalStorage-based cart persistence
-
-💳 Checkout Demo
-
-\- Separate payment page
-
-\- Card number validation
-
-\- CVV validation
-
-\- Expiry date validation
-
-\- UPI validation
-
-\- Cash on Delivery option
-
-\- Order confirmation
-
-Important: Authentication and payment functionality are frontend demo features using browser LocalStorage. No real payment gateway or production authentication service is implemented.
-
-
-
-🛠️ Technologies Used
-
-Frontend
-
-\- HTML5
-
-\- CSS3
-
-\- JavaScript
-
-\- Browser LocalStorage
-
-DevOps / Cloud
-
-\- Git
-
-\- GitHub
-
-\- GitHub Actions
-
-\- Docker
-
-\- Docker Hub
-
-\- Amazon S3
-
-\- AWS IAM
-
-\- GitHub OIDC
-
-🐳 Docker
-
-The application is containerized using Nginx.
-
-Dockerfile
-
-The Docker image uses:
-
-FROM nginx:alpine
-
-
-
-Website files are copied into the Nginx web root.
-
-Build Docker Image
-
+```bash
 docker build -t nexvion:1.0 .
+```
 
+### Run Locally
 
-
-Run Locally
-
+```bash
 docker run -d -p 8080:80 --name nexvion-container nexvion:1.0
-
-
+```
 
 Open:
 
+```text
 http://localhost:8080
+```
 
+### Docker Hub
 
+The Docker image is published on Docker Hub:
 
-Docker Hub
+**mayurii13/nexvion**
 
-The Docker image is published to Docker Hub:
+---
 
-mayurii13/nexvion
+## ☁️ AWS Deployment
 
-☁️ AWS Deployment
+The Nexvion website files are hosted in an **Amazon S3** bucket.
 
-The website files are hosted in an Amazon S3 bucket.
+### AWS Services Used
 
-AWS Services Used
+- Amazon S3
+- AWS IAM
+- IAM OIDC Identity Provider
+- GitHub Actions
 
-\- Amazon S3
+The S3 bucket uses controlled access rather than allowing public write access.
 
-\- AWS IAM
+---
 
-\- IAM OIDC Identity Provider
+## 🔄 CI/CD Pipeline
 
-\- GitHub Actions
+Nexvion uses **GitHub Actions** to automatically deploy website changes to Amazon S3.
 
-The S3 bucket is configured with controlled access rather than making the bucket publicly writable.
+### Deployment Flow
 
-🔄 CI/CD Pipeline
-
-Nexvion uses GitHub Actions to automatically deploy website changes to Amazon S3.
-
-Deployment Flow
-
+```text
 Git Push
-
-&#x20;  ↓
-
+   ↓
 GitHub Actions
-
-&#x20;  ↓
-
+   ↓
 Checkout Repository
-
-&#x20;  ↓
-
+   ↓
 AWS OIDC Authentication
-
-&#x20;  ↓
-
+   ↓
 Assume IAM Deployment Role
-
-&#x20;  ↓
-
+   ↓
 Upload Website Files
-
-&#x20;  ↓
-
+   ↓
 Amazon S3
+```
 
+Whenever changes are pushed to the `main` branch, the GitHub Actions workflow runs automatically.
 
+---
 
-Whenever changes are pushed to the main branch, the GitHub Actions workflow runs automatically.
+## 🔐 AWS OIDC Authentication
 
-🔐 AWS OIDC Authentication
+The CI/CD pipeline does **not** use long-lived AWS access keys.
 
-The CI/CD pipeline does not use long-lived AWS access keys.
+Instead, GitHub Actions uses **OpenID Connect (OIDC)** to authenticate with AWS and obtain temporary credentials.
 
-Instead, GitHub Actions uses OpenID Connect (OIDC) to obtain temporary AWS credentials.
-
-The IAM trust policy restricts the deployment role to the Nexvion repository and main branch.
+The IAM trust policy restricts the deployment role to the Nexvion GitHub repository and `main` branch.
 
 This provides a more secure authentication model for GitHub-to-AWS deployments.
 
-🔑 IAM Least Privilege
+---
+
+## 🔑 IAM Least Privilege
 
 The GitHub Actions deployment role is dedicated to Nexvion.
 
-Its S3 permissions are limited to the Nexvion bucket and required deployment actions.
+Its S3 permissions are limited to the Nexvion bucket and the actions required for deployment.
 
-This follows the AWS least-privilege principle instead of granting broad administrator permissions.
+This follows the AWS **least-privilege** principle instead of granting broad administrator permissions.
 
-📁 Project Structure
+---
 
+## 📁 Project Structure
+
+```text
 Nexvion-main/
-
 │
-
 ├── index.html
-
 ├── products.html
-
 ├── payment.html
-
 │
-
 ├── style.css
-
 ├── products.css
-
 ├── payment.css
-
 │
-
 ├── script.js
-
 ├── payment.js
-
 │
-
 ├── logo.png
-
 │
-
 ├── Dockerfile
-
 ├── README.md
-
 ├── README.txt
-
 ├── .gitignore
-
 │
-
 └── .github/
+    └── workflows/
+        └── deploy.yml
+```
 
-&#x20;   └── workflows/
+---
 
-&#x20;       └── deploy.yml
+## 🔒 Security & Production Notes
 
+This project is a **learning and portfolio demonstration**.
 
+The following are not implemented as production systems:
 
-🔒 Security Notes
+- Real payment processing
+- Production authentication
+- Backend API
+- Real user database
+- Secure server-side sessions
 
-This project is a learning and portfolio demonstration.
+A production e-commerce application would require:
 
-The following are intentionally not implemented as production systems:
+- Backend services
+- Secure authentication
+- Database
+- HTTPS
+- Server-side validation
+- Secure session management
+- A certified payment gateway
 
-\- Real payment processing
+---
 
-\- Production authentication
-
-\- Backend API
-
-\- Real user database
-
-\- Secure server-side sessions
-
-A production e-commerce application would require a backend, secure authentication, database, HTTPS, server-side validation, and a certified payment gateway.
-
-🎯 DevOps Learning Outcomes
+## 🎯 DevOps Learning Outcomes
 
 Through this project, I practiced:
 
-\- Git version control
+- Git version control
+- GitHub repository management
+- Docker containerization
+- Docker image creation
+- Docker Hub publishing
+- Amazon S3 deployment
+- AWS IAM roles
+- IAM OIDC federation
+- GitHub Actions
+- CI/CD automation
+- Least-privilege access
+- Cloud deployment architecture
 
-\- GitHub repository management
+---
 
-\- Docker containerization
+## 👩‍💻 Author
 
-\- Docker image creation
+**Mayuri Ambare**
 
-\- Docker Hub publishing
+B.Tech — Electronics & Telecommunication Engineering
 
-\- Amazon S3 deployment
+**Cloud & DevOps Engineer | AWS | Docker | Kubernetes | Terraform | Linux**
 
-\- AWS IAM roles
-
-\- IAM OIDC federation
-
-\- GitHub Actions
-
-\- CI/CD automation
-
-\- Least-privilege access
-
-\- Cloud deployment architecture
-
-👩‍💻 Author
-
-Mayuri Ambare
-
-B.Tech — Electronics \& Telecommunication Engineering
-
-Cloud \& DevOps Engineer | AWS | Docker | Kubernetes | Terraform | Linux
-
-GitHub: mayuriii-13
-
+GitHub: [mayuriii-13](https://github.com/mayuriii-13)
